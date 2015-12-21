@@ -33,9 +33,9 @@ if [ $flash -gt ${#imageArray[@]} ] || [ $flash -lt 0 ]; then
 else
 	clear
 	flash=$(($flash-1))
-	diskutil unmountDisk /dev/disk2 ` #Change for your device
+	diskutil unmountDisk /dev/disk2 #Change for your device
 	echo "Flashing, please wait..."
-	gunzip -c $IMAGE_PATH/${imageArray[$flash]} | sudo dd of=/dev/rdisk2 bs=8m` #Change for your device
+	gunzip -c $IMAGE_PATH/${imageArray[$flash]} | sudo dd of=/dev/rdisk2 bs=8m #Change for your device
 
 fi
 exit 0
