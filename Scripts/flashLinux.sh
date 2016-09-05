@@ -31,15 +31,15 @@ else
 
 			case $(echo `expr "$image" : '.*\.\(.*\)$'`) in
 				"gz") 
-					gunzip -c $image | dd of=$flashDevicebs=8M conv=sync,notrunc,noerror | zenity --progress --pulsate --auto-close
+					(gunzip -c $image | dd of=$flashDevicebs=8M conv=sync,notrunc,noerror) | zenity --progress --pulsate --auto-close
 					zenity --info --title "Done!!" --text "Remove your SD."
 					;;
 				"img") 
-					dd if=$image of=$flashDevice bs=8M conv=sync,notrunc,noerror | zenity --progress --pulsate --auto-close
+					(dd if=$image of=$flashDevice bs=8M conv=sync,notrunc,noerror) | zenity --progress --pulsate --auto-close
 					zenity --info --title "Done!!" --text "Remove your SD."
 					;;
 				"xz")
-					xz -dkc $image > $flashDevice |  zenity --progress --pulsate --auto-close
+					(xz -dkc $image > $flashDevice) |  zenity --progress --pulsate --auto-close
 					zenity --info --title "Done!!" --text "Remove your SD."
 					;;
 				*)
