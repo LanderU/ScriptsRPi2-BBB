@@ -21,4 +21,6 @@ Launch the script with `sudo`
 
 **Note**: change path of the images and device, on the script.
 
-If you need use BBB scripts, change to BBB branch,, `git checkout BBB`, or you can clone only the BBB branch: `git clone --single-branch https://github.com/LanderU/ScriptsRPi2-BBB`
+## Change the branch
+
+If you need use BBB scripts, change to BBB branch, `git checkout BBB`, or you can clone only the BBB branch: `git clone --single-branch https://github.com/LanderU/ScriptsRPi2-BBB`
