@@ -1,4 +1,0 @@
-MLO
-u-boot.img
-*bak
-flash-eMMC.txt
