@@ -35,6 +35,7 @@ else
 	clear
 	flash=$(($flash-1))
 	if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
+		echo "Unmounted correctly"
 		echo "Flashing, please wait..."
 		gunzip -c $IMAGE_PATH/${imageArray[$flash]} | sudo dd of=$FLASH_DEVICE bs=8m
 	else
