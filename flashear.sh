@@ -37,7 +37,7 @@ else
 	if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
 		echo "Unmounted correctly"
 		echo "Flashing, please wait..."
-		gunzip -c $IMAGE_PATH/${imageArray[$flash]} | sudo dd of=$FLASH_DEVICE bs=8m conv=sync
+		gunzip -c $IMAGE_PATH/${imageArray[$flash]} | sudo dd of=$FLASH_DEVICE
 	else
 		clear
 		echo "Please, change the device number"
