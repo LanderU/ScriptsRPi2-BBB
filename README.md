@@ -27,5 +27,5 @@ If you need use BBB scripts, change to BBB branch, `git checkout BBB`, or you ca
 
 ### TODO
 
-* [] Progress bar.
-* [] Estimated time.
+* [ ] Progress bar.
+* [ ] Estimated time.
