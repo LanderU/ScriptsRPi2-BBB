@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#!/bin/bash
-
 : '
 
  maintainer Lander Usategui, e-mail: lander.usategui@gmail.com
@@ -43,6 +41,7 @@ if [ $currentUser == "root" ]; then
 		if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
 			echo "Unmounted correctly"
 			echo "Flashing, please wait..."
+			echo ${imageArray[$flash]}
 			gunzip -c $IMAGE_PATH/${imageArray[$flash]} | pv | dd of=$FLASH_DEVICE bs=8m
 		else
 			clear
