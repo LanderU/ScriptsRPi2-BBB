@@ -2,7 +2,7 @@
 
 : '
 
- maintainer Lander Usategui, e-mail: lander.usategui@gmail.com
+ maintainer Lander Usategui San Juan, e-mail: lander.usategui@gmail.com
 
 '
 
@@ -65,7 +65,8 @@ if [ $currentUser == "root" ]; then
 				"img" ) if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
 							echo "Unmounted correctly"
 							echo "Flashing, please wait..."
-							dd if=$IMAGE_PATH/${imageArray[$flash]} | pv | dd of=$FLASH_DEVICE bs=8m
+							SIZE=`du -h $IMAGE_PATH/${imageArray[$flash]} | cut -d "," -f1`G
+							dd if=$IMAGE_PATH/${imageArray[$flash]} | pv -s $SIZE | dd of=$FLASH_DEVICE bs=8m
 						else
 							clear
 							redColor
@@ -77,6 +78,7 @@ if [ $currentUser == "root" ]; then
 					redColor
 					echo "Unknown file extension..."
 					resetColor
+					exit 1
 				  ;;
 			esac
 		else
@@ -85,7 +87,7 @@ if [ $currentUser == "root" ]; then
 					echo "Unmounted correctly"
 					echo "Flashing, please wait..."
 					echo ${imageArray[$flash]}
-					gunzip -c $IMAGE_PATH/${imageArray[$flash]} | pv | dd of=$FLASH_DEVICE bs=8m
+					gunzip -c $IMAGE_PATH/${imageArray[$flash]} | pv -s 7g | dd of=$FLASH_DEVICE bs=8m
 				else
 					clear
 					redColor
