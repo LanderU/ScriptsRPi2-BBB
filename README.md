@@ -17,6 +17,13 @@ Launch the script with `sudo`
 
 # MAC OSX
 
+Dependencies
+=======
+
+* [HomeBrew](http://brew.sh/index_es.html)
+
+* `brew install pv`
+
 ## With flash.sh script you can flash your SD under MAC OSX.
 
 **Note**: change path of the images and device, on the script.
