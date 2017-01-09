@@ -115,11 +115,10 @@ if [ $currentUser == "root" ]; then
 				# Check if 'pv' command exists
 				if [ -z $EXISTSPV ]; then
 					if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
-						# Flash with progress bar
+						# Flash without progress bar
 						echo "Unmounted correctly"
 						echo "Flashing, please wait..."
-						echo ${imageArray[$flash]}
-						gunzip -c $IMAGE_PATH/${imageArray[$flash]} | pv -s 7g | dd of=$FLASH_DEVICE bs=8m
+						gunzip -c $IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m
 					else
 						# Bad device number exit
 						clear
@@ -129,12 +128,11 @@ if [ $currentUser == "root" ]; then
 						exit 1
 					fi
 				else
-					# Flash without progress bar
+					# Flash with progress bar
 					if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
 						echo "Unmounted correctly"
 						echo "Flashing, please wait..."
-						echo ${imageArray[$flash]}
-						gunzip -c $IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m
+						gunzip -c $IMAGE_PATH/${imageArray[$flash]} | pv -s 7g | dd of=$FLASH_DEVICE bs=8m
 					else
 						# Bad device number exit
 						clear
