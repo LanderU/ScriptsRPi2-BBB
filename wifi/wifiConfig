@@ -1,0 +1,62 @@
+#!/bin/bash
+
+set -e
+set -x
+
+: '
+
+Author: Lander Usategui, lander@erlerobotics.com
+
+'
+
+###########################
+##      FUNCTIONS        ##
+###########################
+function firstMenu()
+{
+    OPTION=$(whiptail --title "What do you need?" --menu "Choose an option" 25 78 16 \
+    "Connect to internet." ""\
+    "Hostspot." "" 3>&1 1>&2 2>&3)
+
+    case "$OPTION" in
+       "Connect to internet.") internetMenu
+       ;;
+       "Hostspot.") echo "I like banana nut bread."
+       ;;
+    esac
+}
+
+function internetMenu()
+{
+  if [ "`ifconfig | awk '{print $1}' | grep '^w' 2>/dev/null`" ]; then
+    WIFI_DEVICES=($(ifconfig | awk '{print $1}' | grep '^e'))
+    whiptail --title "xx" --menu "choose" 16 78 10 "" "${WIFI_DEVICES[@]}"
+  else
+    whiptail --title "ERROR" --msgbox "No Wifi devices found..." 8 78
+  fi
+
+}
+
+function hostspotMenu()
+{
+
+
+}
+
+function main()
+{
+  CURRENT_USER=`whoami`
+
+  if [ "${CURRENT_USER}" = "root" ]; then
+  firstMenu
+  else
+    whiptail --title "ERROR" --msgbox "Launch the script with sudo...\n\"sudo ./wifiConfig\"" 8 78
+  fi
+
+}
+###########################
+##     END FUNCTIONS     ##
+###########################
+
+## Start script  ##
+main
