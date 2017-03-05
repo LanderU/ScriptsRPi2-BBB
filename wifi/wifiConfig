@@ -23,25 +23,47 @@ function firstMenu()
        ;;
        "Hotspot.") hotspotMenu
        ;;
+       "") whiptail --title "NOTE" --msgbox "Nothing to do, exiting..." 8 78
+          exit 0
+       ;;
     esac
 }
 
 function internetMenu()
 {
-  if [ "`ifconfig | awk '{print $1}' | grep '^w' 2>/dev/null`" ]; then
+  if [ "`ifconfig | awk '{print $1}' | grep '^e' 2>/dev/null`" ]; then
     WIFI_DEVICES=($(ifconfig | awk '{print $1}' | grep '^e'))
-    whiptail --title "xx" --menu "choose" 16 78 10 "" "${WIFI_DEVICES[@]}"
+    whiptail --title "Select device" --menu "Choose" 16 78 10 "" "${WIFI_DEVICES[@]}"
+    internetConfig
   else
     whiptail --title "ERROR" --msgbox "No Wifi devices found..." 8 78
   fi
 
 }
 
+function internetConfig()
+{
+  NETWORK_NAME=$(whiptail --inputbox "Network name" 8 78 --title "Type the network name (SSID)" 3>&1 1>&2 2>&3)
+
+  echo $NETWORK_NAME
+
+  if [ "${NETWORK_NAME}" == "" ]; then
+    whiptail --title "ERROR" --msgbox "Please, the name of the network is necessary..." 8 78
+  elif [ $? = 0 ]; then
+    whiptail --title "CANCEL" --msgbox "Exiting..." 8 78
+  else
+    PASSWORD=$(whiptail --passwordbox "Please, enter the password" 8 78 --title "password dialog" 3>&1 1>&2 2>&3)
+  fi
+
+}
+
+: '
 function hotspotMenu()
 {
 
 
 }
+'
 
 function main()
 {
