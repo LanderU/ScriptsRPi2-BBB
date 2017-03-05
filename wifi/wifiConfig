@@ -16,12 +16,12 @@ function firstMenu()
 {
     OPTION=$(whiptail --title "What do you need?" --menu "Choose an option" 25 78 16 \
     "Connect to internet." ""\
-    "Hostspot." "" 3>&1 1>&2 2>&3)
+    "Hotspot." "" 3>&1 1>&2 2>&3)
 
     case "$OPTION" in
        "Connect to internet.") internetMenu
        ;;
-       "Hostspot.") echo "I like banana nut bread."
+       "Hotspot.") hotspotMenu
        ;;
     esac
 }
@@ -37,7 +37,7 @@ function internetMenu()
 
 }
 
-function hostspotMenu()
+function hotspotMenu()
 {
 
 
