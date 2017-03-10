@@ -8,6 +8,10 @@ set -x
 Author: Lander Usategui, lander@erlerobotics.com
 
 '
+###########################
+#       CONSTANTS         #
+###########################
+SET_NETWORK="/usr/bin/wpa_passphrase"
 
 ###########################
 ##      FUNCTIONS        ##
@@ -31,7 +35,7 @@ function firstMenu()
 
 function internetMenu()
 {
-  if [ "`ifconfig | awk '{print $1}' | grep '^e' 2>/dev/null`" ]; then
+  if [ "`ifconfig | awk '{print $1}' | grep '^w' 2>/dev/null`" ]; then
     WIFI_DEVICES=($(ifconfig | awk '{print $1}' | grep '^e'))
     whiptail --title "Select device" --menu "Choose" 16 78 10 "" "${WIFI_DEVICES[@]}"
     internetConfig
