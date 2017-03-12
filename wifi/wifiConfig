@@ -42,6 +42,7 @@ function internetMenu()
     internetConfig
   else
     whiptail --title "ERROR" --msgbox "No Wifi devices found..." 8 78
+    exit 1
   fi
 
 }
@@ -52,17 +53,27 @@ function internetConfig()
 
   if [ "${NETWORK_NAME}" == "" ]; then
     whiptail --title "ERROR" --msgbox "Please, the name of the network is necessary..." 8 78
+    exit 1
   elif [ $? = 0 ]; then
     whiptail --title "CANCEL" --msgbox "Exiting..." 8 78
+    exit 1
   else
     PASSWORD=$(whiptail --passwordbox "Please, enter the password" 8 78 --title "password dialog" 3>&1 1>&2 2>&3)
     # Check password
     if [ "${PASSWORD}" == "" ]; then
       whiptail --title "ERROR" --msgbox "The password is necessary..." 8 78
+      exit 1
     elif [ $? = 0 ]; then
       whiptail --title "CANCEL" --msgbox "Exiting..." 8 78
+      exit 1
     else
-      internetConnection
+      # Check password length needs between 8 and 63
+      if [ ${#PASSWORD} -lt 8 ] || [ ${#PASSWORD} -gt 63 ]; then
+        whiptail --title "ERROR" --msgbox "Passphrase must be 8..63 characters" 8 78
+        exit 1
+      else
+        internetConnection
+      fi
     fi
   fi
 
