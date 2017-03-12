@@ -12,6 +12,7 @@ Author: Lander Usategui, lander@erlerobotics.com
 #       CONSTANTS         #
 ###########################
 SET_NETWORK="/usr/bin/wpa_passphrase"
+WPA_DIR="/etc/wpa_supplicant"
 
 ###########################
 ##      FUNCTIONS        ##
@@ -49,15 +50,36 @@ function internetConfig()
 {
   NETWORK_NAME=$(whiptail --inputbox "Network name" 8 78 --title "Type the network name (SSID)" 3>&1 1>&2 2>&3)
 
-  echo $NETWORK_NAME
-
   if [ "${NETWORK_NAME}" == "" ]; then
     whiptail --title "ERROR" --msgbox "Please, the name of the network is necessary..." 8 78
   elif [ $? = 0 ]; then
     whiptail --title "CANCEL" --msgbox "Exiting..." 8 78
   else
     PASSWORD=$(whiptail --passwordbox "Please, enter the password" 8 78 --title "password dialog" 3>&1 1>&2 2>&3)
+    # Check password
+    if [ "${PASSWORD}" == "" ]; then
+      whiptail --title "ERROR" --msgbox "The password is necessary..." 8 78
+    elif [ $? = 0 ]; then
+      whiptail --title "CANCEL" --msgbox "Exiting..." 8 78
+    else
+      internetConnection
+    fi
   fi
+
+}
+
+function internetConnection()
+{
+
+  {
+    for ((i = 0 ; i <= 100 ; i+=5)); do
+        sleep 0.05
+        echo $i
+    done
+  } | whiptail --gauge "Configuring your network, please wait..." 6 50 0
+
+  #Create file
+  $SET_NETWORK $NETWORK_NAME $PASSWORD > $WPA_DIR/net.conf
 
 }
 
@@ -65,10 +87,8 @@ function internetConfig()
 function hotspotMenu()
 {
 
-
 }
 '
-
 function main()
 {
   CURRENT_USER=`whoami`
