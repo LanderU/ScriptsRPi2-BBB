@@ -67,7 +67,7 @@ if [ $currentUser == "root" ]; then
 		# Clear screen
 		clear
 		flash=$(($flash-1))
-		# Check file extension 
+		# Check file extension
 		EXTENSION=`echo $$IMAGE_PATH/${imageArray[$flash]} | cut -d "." -f3`
 		if [ -z $EXTENSION ]; then
 			EXTENSION=`echo $$IMAGE_PATH/${imageArray[$flash]} | cut -d "." -f2`
