@@ -68,17 +68,24 @@ if [ $currentUser == "root" ]; then
 		clear
 		flash=$(($flash-1))
 		# Check file extension
-		EXTENSION=`echo $$IMAGE_PATH/${imageArray[$flash]} | cut -d "." -f3`
+		EXTENSION=`echo $IMAGE_PATH/${imageArray[$flash]} | cut -d "." -f3`
 		if [ -z $EXTENSION ]; then
-			EXTENSION=`echo $$IMAGE_PATH/${imageArray[$flash]} | cut -d "." -f2`
+			EXTENSION=`echo $IMAGE_PATH/${imageArray[$flash]} | cut -d "." -f2`
 			case $EXTENSION in
-				"img" ) # Check if 'pv' command exists
+				"img" )
+            # Check if 'pv' command exists
 						if [ -z $EXISTSPV ]; then
 							if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
 								# Flash without progress bar
 								echo "Unmounted correctly"
 								echo "Flashing, please wait..."
 								dd if=$IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m
+                # Unmount the disk
+                if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
+                  echo "Done"
+                else
+                  echo "Unable, to unmount the volume."
+                fi
 							else
 								clear
 								redColor
@@ -93,6 +100,12 @@ if [ $currentUser == "root" ]; then
 								echo "Flashing, please wait..."
 								SIZE=`du -h $IMAGE_PATH/${imageArray[$flash]} | cut -d "," -f1`G
 								dd if=$IMAGE_PATH/${imageArray[$flash]} | pv -s $SIZE | dd of=$FLASH_DEVICE bs=8m
+                # Unmount the disk
+                if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
+                  echo "Done"
+                else
+                  echo "Unable, to unmount the volume."
+                fi
 							else
 								# Bad device number exit
 								clear
@@ -119,6 +132,12 @@ if [ $currentUser == "root" ]; then
 						echo "Unmounted correctly"
 						echo "Flashing, please wait..."
 						gunzip -c $IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m
+            # Unmount the disk
+            if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
+              echo "Done"
+            else
+              echo "Unable, to unmount the volume."
+            fi
 					else
 						# Bad device number exit
 						clear
@@ -133,6 +152,12 @@ if [ $currentUser == "root" ]; then
 						echo "Unmounted correctly"
 						echo "Flashing, please wait..."
 						gunzip -c $IMAGE_PATH/${imageArray[$flash]} | pv -s 7g | dd of=$FLASH_DEVICE bs=8m
+            # Unmount the disk
+            if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
+              echo "Done"
+            else
+              echo "Unable, to unmount the volume."
+            fi
 					else
 						# Bad device number exit
 						clear
