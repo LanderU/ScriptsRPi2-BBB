@@ -34,7 +34,7 @@ The folder contain a simple script to deploy the differents kernel (not include)
 
 # WiFi (WIP)
 
-Simple script to configure the WiFi.
+Simple script to configure the WiFi. Connect to internet or hotspot.
 
 ## Change the branch
 
