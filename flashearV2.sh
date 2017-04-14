@@ -2,48 +2,56 @@
 
 : '
 
- maintainer Lander Usategui San Juan, e-mail: lander.usategui@gmail.com
+ Maintainer Lander Usategui San Juan, e-mail: lander.usategui@gmail.com
 
 '
 
 #####################
-####    COLORS   ####
+####  CONSTANTS   ###
+#####################
+# CONSTANTS
+IMAGE_PATH="/Users/lander/ImagesFlash" #Change for your path
+DEVICE="/dev/disk2" #Change for your device
+FLASH_DEVICE="/dev/rdisk2" #Change for your device
+# USER
+currentUser=`whoami`
+# Array
+cont=1
+indexArray=0
+imageArray=( )
+
+#####################
+####  FUNCTIONS   ###
 #####################
 
-redColor(){
-	tput setaf 1
-} # End red color
+function checkPV()
+{
+	EXISTSPV=`command -v pv`
+	if [ -z $EXISTSPV ]; then
+		EXISTSPV="false"
+	else
+		EXISTSPV="true"
+	fi
+	echo $EXISTSPV
+}
 
-resetColor(){
-	tput sgr 0
-} # End Reset color
+function checkUser()
+{
+	# Clear screen
+	clear
+	if [ $currentUser == "root" ]; then
+		checkImage
+	else
+		# Bad user
+		redColor
+		echo "\"sudo\" is needed..."
+		resetColor
+		exit 1
+	fi
+}
 
-####################
-######  USER  ######
-####################
-
-currentUser=`whoami`
-
-####################
-####     pv    #####
-####################
-
-EXISTSPV=`command -v pv`
-
-# Clear screen
-clear
-
-if [ $currentUser == "root" ]; then
-	# CONSTANTS
-	IMAGE_PATH="/Users/lander/ImagesFlash" #Change for your path
-	DEVICE="/dev/disk2" #Change for your device
-	FLASH_DEVICE="/dev/rdisk2" #Change for your device
-
-	# Necessary variables
-	cont=1
-	indexArray=0
-	imageArray=( )
-
+function checkImage()
+{
 	# Set vector with images
 	for i in `ls $IMAGE_PATH`; do
 		echo $cont"- "$i
@@ -62,50 +70,140 @@ if [ $currentUser == "root" ]; then
 		echo "Invalid number, launch the script again and choose one number of the list"
 		resetColor
 		exit 1
-
 	else
-		# Clear screen
-		clear
-		flash=$(($flash-1))
-		# Check file extension
-		EXTENSION=`echo $IMAGE_PATH/${imageArray[$flash]} | cut -d "." -f3`
-		if [ -z $EXTENSION ]; then
-			EXTENSION=`echo $IMAGE_PATH/${imageArray[$flash]} | cut -d "." -f2`
-			case $EXTENSION in
-				"img" )
-            # Check if 'pv' command exists
-						if [ -z $EXISTSPV ]; then
+		flashSd
+	fi
+}
+
+function flashSd()
+{
+	# Clear screen
+	clear
+	flash=$(($flash-1))
+	# Check file extension
+	EXTENSION=`echo $IMAGE_PATH/${imageArray[$flash]} | cut -d "." -f3`
+	# Empty?
+	if [ -z $EXTENSION ]; then
+		# Check again
+		EXTENSION=`echo $IMAGE_PATH/${imageArray[$flash]} | cut -d "." -f2`
+		case $EXTENSION in
+			"img") # Check PV
+				   if [ $( checkPV ) == "true" ]; then
+				   		# Flash with progress bar
+						if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
+							echo "Unmounted correctly"
+							echo "Flashing, please wait..."
+							SIZE=`du -h $IMAGE_PATH/${imageArray[$flash]} | cut -d "," -f1`G
+							dd if=$IMAGE_PATH/${imageArray[$flash]} | pv -s $SIZE | dd of=$FLASH_DEVICE bs=8m
 							if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
-								# Flash without progress bar
-								echo "Unmounted correctly"
-								echo "Flashing, please wait..."
-								dd if=$IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m
-                # Unmount the disk
-                if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
-                  echo "Done"
-                else
-                  echo "Unable, to unmount the volume."
-                fi
-							else
 								clear
-								redColor
-								echo "Please, change the device number"
-								resetColor
-								exit 1
+								echo -e "Done\nRemove your SD Card"
+								exit 0
+							else
+								echo "Unable to unmount the SD Card"
 							fi
 						else
-							# Flash with progress bar
+							# Bad device number exit
+							clear
+							redColor
+							echo "Please, change the device number"
+							resetColor
+							exit 1
+						fi
+				   else
+				   		if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
+							# Flash without progress bar
+							echo "Unmounted correctly"
+							echo "Flashing, please wait..."
+							dd if=$IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m
+							if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
+								clear
+								echo -e "Done\nRemove your SD Card"
+								exit 0
+							else
+								echo "Unable to unmount the SD Card"
+							fi
+						else
+							clear
+							redColor
+							echo "Please, change the device number"
+							resetColor
+							exit 1
+						fi
+				   fi
+			;;
+			* ) clear
+				redColor
+				echo "Unknown file extension..."
+				resetColor
+				exit 1
+			;;
+		esac
+	else
+		case $EXTENSION in
+			"gz") 	# Check PV
+				   if [ $( checkPV ) == "true" ]; then
+				   		# Flash with progress bar
+						if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
+							echo "Unmounted correctly"
+							echo "Flashing, please wait..."
+							SIZE=`du -h $IMAGE_PATH/${imageArray[$flash]} | cut -d "," -f1`G
+							gunzip -c $IMAGE_PATH/${imageArray[$flash]} | pv -s 7g | dd of=$FLASH_DEVICE bs=8m
+							if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
+								clear
+								echo -e "Done\nRemove your SD Card"
+								exit 0
+							else
+								echo "Unable to unmount the SD Card"
+							fi
+						else
+							# Bad device number exit
+							clear
+							redColor
+							echo "Please, change the device number"
+							resetColor
+							exit 1
+						fi
+				   else
+				   		if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
+							# Flash without progress bar
+							echo "Unmounted correctly"
+							echo "Flashing, please wait..."
+							gunzip -c $IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m
+							if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
+								clear
+								echo -e "Done\nRemove your SD Card"
+								exit 0
+							else
+								echo "Unable to unmount the SD Card"
+							fi
+						else
+							clear
+							redColor
+							echo "Please, change the device number"
+							resetColor
+							exit 1
+						fi
+				   fi
+			;;
+			"img") 
+					EXTENSION=`echo $IMAGE_PATH/${imageArray[$flash]} | cut -d "." -f4`
+					if [ -z $EXTENSION ]; then
+					   # Check PV
+					    if [ $( checkPV ) == "true" ]; then
+					   		# Flash with progress bar
 							if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
 								echo "Unmounted correctly"
 								echo "Flashing, please wait..."
 								SIZE=`du -h $IMAGE_PATH/${imageArray[$flash]} | cut -d "," -f1`G
 								dd if=$IMAGE_PATH/${imageArray[$flash]} | pv -s $SIZE | dd of=$FLASH_DEVICE bs=8m
-                # Unmount the disk
-                if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
-                  echo "Done"
-                else
-                  echo "Unable, to unmount the volume."
-                fi
+								if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
+									clear
+									echo -e "Done\nRemove your SD Card"
+									exit 0
+								else
+									echo "Unable to unmount the SD Card"
+								fi
 							else
 								# Bad device number exit
 								clear
@@ -114,68 +212,58 @@ if [ $currentUser == "root" ]; then
 								resetColor
 								exit 1
 							fi
-						fi
-					;;
-				* ) clear
-					redColor
-					echo "Unknown file extension..."
-					resetColor
-					exit 1
-				  ;;
-			esac
-		else
-			if [ "$EXTENSION" == "gz" ]; then
-				# Check if 'pv' command exists
-				if [ -z $EXISTSPV ]; then
-					if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
-						# Flash without progress bar
-						echo "Unmounted correctly"
-						echo "Flashing, please wait..."
-						gunzip -c $IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m
-            # Unmount the disk
-            if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
-              echo "Done"
-            else
-              echo "Unable, to unmount the volume."
-            fi
+					    else
+					   		if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
+								# Flash without progress bar
+								echo "Unmounted correctly"
+								echo "Flashing, please wait..."
+								dd if=$IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m
+								if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
+									clear
+									echo -e "Done\nRemove your SD Card"
+									exit 0
+								else
+									echo "Unable to unmount the SD Card"
+								fi
+							else
+								clear
+								redColor
+								echo "Please, change the device number"
+								resetColor
+								exit 1
+							fi
+					    fi
 					else
-						# Bad device number exit
-						clear
-						redColor
-						echo "Please, change the device number"
-						resetColor
+						echo "zip version?? extract image first..."
 						exit 1
 					fi
-				else
-					# Flash with progress bar
-					if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
-						echo "Unmounted correctly"
-						echo "Flashing, please wait..."
-						gunzip -c $IMAGE_PATH/${imageArray[$flash]} | pv -s 7g | dd of=$FLASH_DEVICE bs=8m
-            # Unmount the disk
-            if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
-              echo "Done"
-            else
-              echo "Unable, to unmount the volume."
-            fi
-					else
-						# Bad device number exit
-						clear
-						redColor
-						echo "Please, change the device number"
-						resetColor
-						exit 1
-					fi
-				fi
-			fi
-		fi
+			;;
+			* ) clear
+				redColor
+				echo "Unknown file extension..."
+				resetColor
+				exit 1
+			;;
+		esac
 	fi
-	exit 0
-else
-	# Bad user
-	clear
-	redColor
-	echo "\"sudo\" is needed..."
-	resetColor
-	exit 1
-fi
+}
+
+# COLORS 
+
+function redColor()
+{
+	tput setaf 1
+} # End red color
+
+function resetColor()
+{
+	tput sgr 0
+} # End Reset color
+
+function main()
+{
+	checkUser
+}
+
+# Start script
+main
