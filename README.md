@@ -30,7 +30,7 @@ Dependencies
 
 # Kernel
 
-The folder contain a simple script to deploy the differents kernel (not include).
+The [folder](https://github.com/LanderU/ScriptsRPi2-BBB/tree/master/Kernel) contain a simple script to deploy the differents kernel (not include).
 
 # WiFi (WIP)
 
