@@ -102,7 +102,7 @@ function flashSd()
 			"img") # Check PV
 				   if [ $( checkPV ) == "true" ]; then
 				   		# Flash with progress bar
-              checkSD
+              					checkSD
 						if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
 							echo "Unmounted correctly"
 							echo "Flashing, please wait..."
@@ -124,7 +124,7 @@ function flashSd()
 							exit 1
 						fi
 				   else
-              checkSD
+              					checkSD
 				   		if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
 							# Flash without progress bar
 							echo "Unmounted correctly"
@@ -158,7 +158,7 @@ function flashSd()
 			"gz") 	# Check PV
 				   if [ $( checkPV ) == "true" ]; then
 				   		# Flash with progress bar
-            checkSD
+            					checkSD
 						if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
 							echo "Unmounted correctly"
 							echo "Flashing, please wait..."
@@ -180,7 +180,7 @@ function flashSd()
 							exit 1
 						fi
 				   else
-              checkSD
+              					checkSD
 				   		if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
 							# Flash without progress bar
 							echo "Unmounted correctly"
@@ -206,7 +206,7 @@ function flashSd()
 					EXTENSION=`echo $IMAGE_PATH/${imageArray[$flash]} | cut -d "." -f4`
 					if [ -z $EXTENSION ]; then
 					   # Check PV
-              checkSD
+              				   checkSD
 					    if [ $( checkPV ) == "true" ]; then
 					   		# Flash with progress bar
 							if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
@@ -230,7 +230,7 @@ function flashSd()
 								exit 1
 							fi
 					    else
-                checkSD
+                					checkSD
 					   		if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
 								# Flash without progress bar
 								echo "Unmounted correctly"
