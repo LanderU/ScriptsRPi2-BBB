@@ -38,7 +38,11 @@ Simple script to configure the WiFi. Connect to internet or hotspot.
 
 ## Change the branch
 
-If you need use BBB scripts, change to BBB branch, `git checkout BBB`, or you can clone only the BBB branch: `git clone -b BBB --single-branch https://github.com/LanderU/ScriptsRPi2-BBB`
+If you need use BBB scripts, change to BBB branch, `git checkout BBB`, or you can clone only the BBB branch: 
+
+```
+git clone -b BBB --single-branch https://github.com/LanderU/ScriptsRPi2-BBB
+
 
 ### Problems?
 
