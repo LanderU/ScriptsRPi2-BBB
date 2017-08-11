@@ -42,6 +42,7 @@ If you need use BBB scripts, change to BBB branch, `git checkout BBB`, or you ca
 
 ```
 git clone -b BBB --single-branch https://github.com/LanderU/ScriptsRPi2-BBB
+```
 
 
 ### Problems?
