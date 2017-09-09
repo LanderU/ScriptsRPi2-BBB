@@ -13,18 +13,45 @@
 #####################
 # CONSTANTS
 IMAGE_PATH="/Users/lander/ImagesFlash" #Change for your path
-DEVICE="/dev/disk2" #Change for your device
-FLASH_DEVICE="/dev/rdisk2" #Change for your device
+DEVICE=""
 # USER
 currentUser=`whoami`
 # Array
 cont=1
+cont2=1
 indexArray=0
+indexArrayDevices=0
 imageArray=( )
+deviceArray=( )
 
 #####################
 ####  FUNCTIONS   ###
 #####################
+function listDevices()
+{
+  for i in `df -h | cut -d " " -f 1 | grep "^/dev/"`; do
+    echo $cont2"- "$i
+    deviceArray[indexArrayDevices]=$i
+    indexArrayDevices=$(($indexArrayDevices+1))
+    cont2=$(($cont2+1))
+  done
+
+  read -p "Choose the device: " device
+
+  if [ $device -gt ${#deviceArray[@]} ] || [ $device -lt 0 ]; then
+    #Bad device number
+    clear
+    redColor
+    echo "Invalid number, launch the script again and choose a number of the list."
+    resetColor
+    exit 1
+  else
+    device=$(($device-1))
+    DEVICE="${deviceArray[$device]}"
+    clear
+    checkImage
+  fi
+}
 
 function checkPV()
 {
@@ -42,7 +69,7 @@ function checkUser()
 	# Clear screen
 	clear
 	if [ $currentUser == "root" ]; then
-		checkImage
+		listDevices
 	else
 		# Bad user
 		redColor
@@ -69,7 +96,7 @@ function checkImage()
 		# Bad number
 		clear
 		redColor
-		echo "Invalid number, launch the script again and choose one number of the list"
+		echo "Invalid number, launch the script again and choose a number of the list."
 		resetColor
 		exit 1
 	else
@@ -107,7 +134,7 @@ function flashSd()
 							echo "Unmounted correctly"
 							echo "Flashing, please wait..."
 							SIZE=`du -h $IMAGE_PATH/${imageArray[$flash]} | cut -d "," -f1`G
-							dd if=$IMAGE_PATH/${imageArray[$flash]} | pv -s $SIZE | dd of=$FLASH_DEVICE bs=8m 2>/dev/null
+							dd if=$IMAGE_PATH/${imageArray[$flash]} | pv -s $SIZE | dd of=$ bs=8m 2>/dev/null
 							if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
 							         clear
 						           echo -e "Done\nRemove your SD Card"
@@ -129,7 +156,7 @@ function flashSd()
 							# Flash without progress bar
 							echo "Unmounted correctly"
 							echo "Flashing, please wait..."
-							dd if=$IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m 2>/dev/null
+							dd if=$IMAGE_PATH/${imageArray[$flash]} | dd of=$DEVICE bs=8m 2>/dev/null
   						if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
   								clear
   								echo -e "Done\nRemove your SD Card"
@@ -163,7 +190,7 @@ function flashSd()
 							echo "Unmounted correctly"
 							echo "Flashing, please wait..."
 							SIZE=`du -h $IMAGE_PATH/${imageArray[$flash]} | cut -d "," -f1`G
-							gunzip -c $IMAGE_PATH/${imageArray[$flash]} | pv -s 7g | dd of=$FLASH_DEVICE bs=8m 2>/dev/null
+							gunzip -c $IMAGE_PATH/${imageArray[$flash]} | pv -s 7g | dd of=$DEVICE bs=8m 2>/dev/null
   						if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
   							  clear
   								echo -e "Done\nRemove your SD Card"
@@ -185,7 +212,7 @@ function flashSd()
 							# Flash without progress bar
 							echo "Unmounted correctly"
 							echo "Flashing, please wait..."
-							gunzip -c $IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m 2>/dev/null
+							gunzip -c $IMAGE_PATH/${imageArray[$flash]} | dd of=$DEVICE bs=8m 2>/dev/null
   						if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
   								clear
   								echo -e "Done\nRemove your SD Card"
@@ -213,7 +240,7 @@ function flashSd()
 								echo "Unmounted correctly"
 								echo "Flashing, please wait..."
 								SIZE=`du -h $IMAGE_PATH/${imageArray[$flash]} | cut -d "," -f1`G
-								dd if=$IMAGE_PATH/${imageArray[$flash]} | pv -s $SIZE | dd of=$FLASH_DEVICE bs=8m 2>/dev/null
+								dd if=$IMAGE_PATH/${imageArray[$flash]} | pv -s $SIZE | dd of=$DEVICE bs=8m 2>/dev/null
   							if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
   									clear
   									echo -e "Done\nRemove your SD Card"
@@ -235,7 +262,7 @@ function flashSd()
 								# Flash without progress bar
 								echo "Unmounted correctly"
 								echo "Flashing, please wait..."
-								dd if=$IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m
+								dd if=$IMAGE_PATH/${imageArray[$flash]} | dd of=$DEVICE bs=8m
   							if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
   									clear
   									echo -e "Done\nRemove your SD Card"
