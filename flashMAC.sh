@@ -109,7 +109,9 @@ function checkSD()
   READ_ONLY=`diskutil info $DEVICE | grep "Read-Only Media"| awk '{print $3}'`
   if [ $READ_ONLY == "Yes" ]; then
     clear
+    redColor
     echo "Unable to flash your SD card, the SD is protected..."
+    resetColor
     exit 1
   fi
 }
@@ -129,7 +131,7 @@ function flashSd()
 			"img") # Check PV
 				   if [ $( checkPV ) == "true" ]; then
 				   		# Flash with progress bar
-              					checkSD
+              checkSD
 						if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
 							echo "Unmounted correctly"
 							echo "Flashing, please wait..."
@@ -140,15 +142,11 @@ function flashSd()
 						           echo -e "Done\nRemove your SD Card"
 								       exit 0
 							else
+                       redColor
 								       echo "Unable to unmount the SD Card"
+                       resetColor
+                       exit 1
 							fi
-						else
-							# Bad device number exit
-							clear
-							redColor
-							echo "Please, change the device number"
-							resetColor
-							exit 1
 						fi
 				   else
               					checkSD
@@ -162,16 +160,13 @@ function flashSd()
   								echo -e "Done\nRemove your SD Card"
   								exit 0
   						else
+                  redColor
   								echo "Unable to unmount the SD Card"
+                  resetColor
+                  exit 1
   						fi
-						else
-							clear
-							redColor
-							echo "Please, change the device number"
-							resetColor
-							exit 1
-						fi
-				   fi
+            fi
+          fi
 			;;
 			* ) clear
 				redColor
@@ -196,15 +191,11 @@ function flashSd()
   								echo -e "Done\nRemove your SD Card"
   								exit 0
   						else
+                  redColor
   								echo "Unable to unmount the SD Card"
+                  resetColor
+                  exit 1
   						fi
-						else
-							# Bad device number exit
-							clear
-							redColor
-							echo "Please, change the device number"
-							resetColor
-							exit 1
 						fi
 				   else
               					checkSD
@@ -218,7 +209,10 @@ function flashSd()
   								echo -e "Done\nRemove your SD Card"
   								exit 0
   						else
+                  redColor
   								echo "Unable to unmount the SD Card"
+                  resetColor
+                  exit 1
   						fi
 						else
 							clear
@@ -228,7 +222,7 @@ function flashSd()
 							exit 1
 						fi
 				   fi
-			;;
+      ;;
 			"img")
 					EXTENSION=`echo $IMAGE_PATH/${imageArray[$flash]} | cut -d "." -f4`
 					if [ -z $EXTENSION ]; then
@@ -246,40 +240,35 @@ function flashSd()
   									echo -e "Done\nRemove your SD Card"
   									exit 0
   							else
+                    redColor
   									echo "Unable to unmount the SD Card"
+                    resetColor
+                    exit 1
   							fi
-							else
-								# Bad device number exit
-								clear
-								redColor
-								echo "Please, change the device number"
-								resetColor
-								exit 1
 							fi
 					    else
-                					checkSD
+                checkSD
 					   		if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
-								# Flash without progress bar
-								echo "Unmounted correctly"
-								echo "Flashing, please wait..."
-								dd if=$IMAGE_PATH/${imageArray[$flash]} | dd of=$DEVICE bs=8m
-  							if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
-  									clear
-  									echo -e "Done\nRemove your SD Card"
-  									exit 0
-  							else
-  									echo "Unable to unmount the SD Card"
-  							fi
-							else
-								clear
-								redColor
-								echo "Please, change the device number"
-								resetColor
-								exit 1
-							fi
+  								# Flash without progress bar
+  								echo "Unmounted correctly"
+  								echo "Flashing, please wait..."
+  								dd if=$IMAGE_PATH/${imageArray[$flash]} | dd of=$DEVICE bs=8m
+    							if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
+    									clear
+    									echo -e "Done\nRemove your SD Card"
+    									exit 0
+    							else
+                      redColor
+    									echo "Unable to unmount the SD Card"
+                      resetColor
+                      exit 1
+    							fi
+                fi
 					    fi
 					else
+            redColor
 						echo "zip version?? extract image first..."
+            resetColor
 						exit 1
 					fi
 			;;
