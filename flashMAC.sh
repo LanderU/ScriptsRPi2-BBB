@@ -14,6 +14,7 @@
 # CONSTANTS
 IMAGE_PATH="/Users/lander/ImagesFlash" #Change for your path
 DEVICE=""
+FLAS_DEVICE=""
 # USER
 currentUser=`whoami`
 # Array
@@ -48,6 +49,8 @@ function listDevices()
   else
     device=$(($device-1))
     DEVICE="${deviceArray[$device]}"
+    NUMBER_DISK=(echo $DEVICE | sed 's/[^0-9]*//g')
+    FLASH_DEVICE="/dev/rdisk$NUMBER_DISK"
     clear
     checkImage
   fi
@@ -136,7 +139,7 @@ function flashSd()
 							echo "Unmounted correctly"
 							echo "Flashing, please wait..."
 							SIZE=`du -h $IMAGE_PATH/${imageArray[$flash]} | cut -d "," -f1`G
-							dd if=$IMAGE_PATH/${imageArray[$flash]} | pv -s $SIZE | dd of=$ bs=8m 2>/dev/null
+							dd if=$IMAGE_PATH/${imageArray[$flash]} | pv -s $SIZE | dd of=$FLASH_DEVICE bs=8m 2>/dev/null
 							if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
 							         clear
 						           echo -e "Done\nRemove your SD Card"
@@ -154,7 +157,7 @@ function flashSd()
 							# Flash without progress bar
 							echo "Unmounted correctly"
 							echo "Flashing, please wait..."
-							dd if=$IMAGE_PATH/${imageArray[$flash]} | dd of=$DEVICE bs=8m 2>/dev/null
+							dd if=$IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m 2>/dev/null
   						if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
   								clear
   								echo -e "Done\nRemove your SD Card"
@@ -185,7 +188,7 @@ function flashSd()
 							echo "Unmounted correctly"
 							echo "Flashing, please wait..."
 							SIZE=`du -h $IMAGE_PATH/${imageArray[$flash]} | cut -d "," -f1`G
-							gunzip -c $IMAGE_PATH/${imageArray[$flash]} | pv -s 7g | dd of=$DEVICE bs=8m 2>/dev/null
+							gunzip -c $IMAGE_PATH/${imageArray[$flash]} | pv -s 7g | dd of=$FLASH_DEVICE bs=8m 2>/dev/null
   						if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
   							  clear
   								echo -e "Done\nRemove your SD Card"
@@ -203,7 +206,7 @@ function flashSd()
 							# Flash without progress bar
 							echo "Unmounted correctly"
 							echo "Flashing, please wait..."
-							gunzip -c $IMAGE_PATH/${imageArray[$flash]} | dd of=$DEVICE bs=8m 2>/dev/null
+							gunzip -c $IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m 2>/dev/null
   						if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
   								clear
   								echo -e "Done\nRemove your SD Card"
@@ -234,7 +237,7 @@ function flashSd()
 								echo "Unmounted correctly"
 								echo "Flashing, please wait..."
 								SIZE=`du -h $IMAGE_PATH/${imageArray[$flash]} | cut -d "," -f1`G
-								dd if=$IMAGE_PATH/${imageArray[$flash]} | pv -s $SIZE | dd of=$DEVICE bs=8m 2>/dev/null
+								dd if=$IMAGE_PATH/${imageArray[$flash]} | pv -s $SIZE | dd of=$FLASH_DEVICE bs=8m 2>/dev/null
   							if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
   									clear
   									echo -e "Done\nRemove your SD Card"
@@ -252,7 +255,7 @@ function flashSd()
   								# Flash without progress bar
   								echo "Unmounted correctly"
   								echo "Flashing, please wait..."
-  								dd if=$IMAGE_PATH/${imageArray[$flash]} | dd of=$DEVICE bs=8m
+  								dd if=$IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m
     							if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
     									clear
     									echo -e "Done\nRemove your SD Card"
