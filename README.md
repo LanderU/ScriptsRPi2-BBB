@@ -26,7 +26,7 @@ Dependencies
 
 ## With flash.sh script you can flash your SD under MAC OSX.
 
-**Note**: change path of the images and device, on the script.
+**Note**: change path of the images on the script.
 
 # Kernel
 
