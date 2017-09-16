@@ -14,7 +14,7 @@
 # CONSTANTS
 IMAGE_PATH="/Users/lander/ImagesFlash" #Change for your path
 DEVICE=""
-FLAS_DEVICE=""
+FLASH_DEVICE=""
 # USER
 currentUser=`whoami`
 # Array
