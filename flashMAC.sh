@@ -49,7 +49,7 @@ function listDevices()
   else
     device=$(($device-1))
     DEVICE="${deviceArray[$device]}"
-    NUMBER_DISK=(echo $DEVICE | sed 's/[^0-9]*//g')
+    NUMBER_DISK=(`echo $DEVICE | grep -o -E '[0-9]+' | head -1 | sed -e 's/^0\+//'`)
     FLASH_DEVICE="/dev/rdisk$NUMBER_DISK"
     clear
     checkImage
