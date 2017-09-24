@@ -31,12 +31,20 @@ deviceArray=( )
 function listDevices()
 {
   for i in `df -h | cut -d " " -f 1 | grep "^/dev/"`; do
-    echo $cont2"- "$i
-    deviceArray[indexArrayDevices]=$i
-    indexArrayDevices=$(($indexArrayDevices+1))
-    cont2=$(($cont2+1))
+    if [ "$i" != "/dev/disk1" ]; then # Avoid show OS hdd
+      echo $cont2"- "$i
+      deviceArray[indexArrayDevices]=$i
+      indexArrayDevices=$(($indexArrayDevices+1))
+      cont2=$(($cont2+1))
+    fi
   done
 
+  if [ $cont2 -eq 1 ]; then # Check if we've available some resource
+    redColor
+    echo "No devices found, insert your SD Card..."
+    resetColor
+    exit 1
+  fi
   read -p "Choose the device: " device
 
   if [ $device -gt ${#deviceArray[@]} ] || [ $device -lt 0 ]; then
