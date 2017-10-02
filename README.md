@@ -24,7 +24,7 @@ Dependencies
 
 * `brew install pv`
 
-## With flashMAC.sh script you can flash your SD under MAC OSX.
+## With [flashMAC.sh](https://github.com/LanderU/ScriptsRPi2-BBB/blob/master/flashMAC.sh) script you can flash your SD under MAC OSX.
 
 **Note**: change path of the images on the script.
 
