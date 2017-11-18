@@ -150,7 +150,7 @@ function flashSd()
               SIZE=`du -h $IMAGE_PATH/${imageArray[$flash]} | cut -d "," -f1`G
               dd if=$IMAGE_PATH/${imageArray[$flash]} | pv -s $SIZE | dd of=$FLASH_DEVICE bs=8m 2>/dev/null
                if [ "`diskutil list | grep $UNMOUNT_DEVICE`" ]; then
-                 `diskutil unmountDisk $UNMOUNT_DEVICE 2>/dev/null`
+                 `diskutil eject $UNMOUNT_DEVICE 2>/dev/null`
                  unmountCheck="`df -h | grep $UNMOUNT_DEVICE`"
                  if [ -z "${unmountCheck}" ]; then
                    clear
@@ -173,7 +173,7 @@ function flashSd()
               echo "Flashing, please wait..."
               dd if=$IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m 2>/dev/null
               if [ "`diskutil list | grep $UNMOUNT_DEVICE`" ]; then
-                diskutil unmountDisk $UNMOUNT_DEVICE 2>/dev/null
+                `diskutil eject $UNMOUNT_DEVICE 2>/dev/null`
                 unmountCheck="`df -h | grep $UNMOUNT_DEVICE`"
                 if [ -z "${unmountCheck}" ]; then
                   clear
@@ -209,7 +209,7 @@ function flashSd()
               SIZE=`du -h $IMAGE_PATH/${imageArray[$flash]} | cut -d "," -f1`G
               gunzip -c $IMAGE_PATH/${imageArray[$flash]} | pv -s 7g | dd of=$FLASH_DEVICE bs=8m 2>/dev/null
               if [ "`diskutil list | grep $UNMOUNT_DEVICE`" ]; then
-                diskutil unmountDisk $UNMOUNT_DEVICE 2>/dev/null
+                `diskutil eject $UNMOUNT_DEVICE 2>/dev/null`
                 unmountCheck="`df -h | grep $UNMOUNT_DEVICE`"
                 if [ -z "${unmountCheck}" ]; then
                   clear
@@ -232,7 +232,7 @@ function flashSd()
               echo "Flashing, please wait..."
               gunzip -c $IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m 2>/dev/null
               if [ "`diskutil list | grep $UNMOUNT_DEVICE`" ]; then
-                diskutil unmountDisk $UNMOUNT_DEVICE 2>/dev/null
+                `diskutil eject $UNMOUNT_DEVICE 2>/dev/null`
                 unmountCheck="`df -h | grep $UNMOUNT_DEVICE`"
                 if [ -z "${unmountCheck}" ]; then
                   clear
@@ -268,7 +268,7 @@ function flashSd()
                 SIZE=`du -h $IMAGE_PATH/${imageArray[$flash]} | cut -d "," -f1`G
                 dd if=$IMAGE_PATH/${imageArray[$flash]} | pv -s $SIZE | dd of=$FLASH_DEVICE bs=8m 2>/dev/null
                 if [ "`diskutil list | grep $UNMOUNT_DEVICE`" ]; then
-                  diskutil unmountDisk $UNMOUNT_DEVICE 2>/dev/null
+                  `diskutil eject $UNMOUNT_DEVICE 2>/dev/null`
                   unmountCheck="`df -h | grep $UNMOUNT_DEVICE`"
                   if [ -z "${unmountCheck}" ]; then
                     clear
@@ -292,7 +292,7 @@ function flashSd()
                   echo "Flashing, please wait..."
                   dd if=$IMAGE_PATH/${imageArray[$flash]} | dd of=$FLASH_DEVICE bs=8m
                   if [ "`diskutil list | grep $UNMOUNT_DEVICE`" ]; then
-                    diskutil unmountDisk $UNMOUNT_DEVICE 2>/dev/null
+                    `diskutil eject $UNMOUNT_DEVICE 2>/dev/null`
                     unmountCheck="`df -h | grep $UNMOUNT_DEVICE`"
                     if [ -z "${unmountCheck}" ]; then
                       clear
