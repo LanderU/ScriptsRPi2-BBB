@@ -23,7 +23,9 @@ function rtDeploy()
   cp -r RT_4.9/overlays /boot
   cp -r RT_4.9/modulos/lib/firmware /lib
   cp -r RT_4.9/modulos/lib/modules/4.9.13-rt12-v7+ /lib/modules
-  sed -i "1 s|$| dwc_otg.fiq_enable=0 dwc_otg.fiq_fsm_enable=0|" /boot/cmdline.txt
+  if [ ! "`cat /boot/cmdline.txt | grep dwc_otg.fiq_enable=0\ dwc_otg.fiq_fsm_enable=0 2>/dev/null`" ]; then
+	sed -i "1 s|$| dwc_otg.fiq_enable=0 dwc_otg.fiq_fsm_enable=0|" /boot/cmdline.txt
+  fi
   echo "Done"
 }
 
