@@ -2,16 +2,16 @@
 
 : '
 
- Maintainer Lander Usategui San Juan, e-mail: lander.usategui@gmail.com
+ Maintainer: Lander Usategui San Juan, e-mail: lander.usategui@gmail.com
 
 '
 
 DEVICE=""
-PATH="/Users/lander/ImagesFlash" #Change for your path
+IMAGE_PATH="/Users/lander/ImagesFlash" #Change for your path
 cont=1
 indexArrayDevices=0
 deviceArray=( )
-currentUser=`whoami`
+currentUser=$(whoami)
 
 #####################
 ####  FUNCTIONS   ###
@@ -20,7 +20,7 @@ function checkUser()
 {
 	# Clear screen
   clear
-	if [ $currentUser == "root" ]; then
+	if [ "$currentUser" == "root" ]; then
 		listDevices
 	else
 		# Bad user
@@ -31,11 +31,11 @@ function checkUser()
 
 function listDevices()
 {
-  for i in `df -h | cut -d " " -f 1 | grep "^/dev/"`; do
-    echo $cont2"- "$i
+  for i in $(df -h | cut -d " " -f 1 | grep "^/dev/"); do
+    echo "$cont- "$i
     deviceArray[indexArrayDevices]=$i
     indexArrayDevices=$(($indexArrayDevices+1))
-    cont=$(($cont+1))
+    cont=$((cont+1))
   done
 
   read -p "Choose the device: " device
@@ -45,7 +45,7 @@ function listDevices()
     echo "Invalid number, launch the script again and choose a number of the list."
     exit 1
   else
-    device=$(($device-1))
+    device=$((device-1))
     DEVICE="${deviceArray[$device]}"
     createImage
   fi
@@ -57,8 +57,8 @@ function createImage()
   if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
     echo "Unmounted correctly."
     read -p "Name of the new image? " name
-    dd if=$DEVICE bs=8m | gzip -c > $PATH/$name.img.gz
-    echo "Done, your image is storaged at $PATH"
+    dd if=$DEVICE bs=8m | gzip -c > $IMAGE_PATH/$name.img.gz
+    echo "Done, your image is storaged at $IMAGE_PATH"
   else
     echo "Unable to unmount the SD Card"
     exit 1
@@ -69,8 +69,8 @@ function createImage()
 
 function checkSD()
 {
-  READ_ONLY=`diskutil info $DEVICE | grep "Read-Only Media"| awk '{print $3}'`
-  if [ $READ_ONLY == "Yes" ]; then
+  READ_ONLY=$(diskutil info $DEVICE | grep "Read-Only Media"| awk '{print $3}')
+  if [ "$READ_ONLY" == "Yes" ]; then
     clear
     echo "Unable to flash your SD card, the SD is protected..."
     exit 1
