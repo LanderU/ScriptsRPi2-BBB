@@ -32,15 +32,16 @@ function checkUser()
 function listDevices()
 {
   for i in $(df -h | cut -d " " -f 1 | grep "^/dev/"); do
-    echo "$cont- "$i
+    echo "$cont- $i"
     deviceArray[indexArrayDevices]=$i
-    indexArrayDevices=$(($indexArrayDevices+1))
+    indexArrayDevices=$((indexArrayDevices+1))
     cont=$((cont+1))
   done
 
-  read -p "Choose the device: " device
+  printf "Choose the device: "
+  read -r device
 
-  if [ $device -gt ${#deviceArray[@]} ] || [ $device -lt 0 ]; then
+  if [ "$device" -gt ${#deviceArray[@]} ] || [ "$device" -lt 0 ]; then
     #Bad device number
     echo "Invalid number, launch the script again and choose a number of the list."
     exit 1
@@ -54,9 +55,10 @@ function listDevices()
 function createImage()
 {
   checkSD
-  if [ "`diskutil unmountDisk $DEVICE 2>/dev/null`" ]; then
+  if [ "$(diskutil unmountDisk $DEVICE 2>/dev/null)" ]; then
     echo "Unmounted correctly."
-    read -p "Name of the new image? " name
+    printf "Name of the new image? "
+    read -r name
     dd if=$DEVICE bs=8m | gzip -c > $IMAGE_PATH/$name.img.gz
     echo "Done, your image is storaged at $IMAGE_PATH"
   else
