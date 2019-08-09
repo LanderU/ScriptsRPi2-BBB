@@ -200,7 +200,7 @@ function flashSd()
   else
     case $EXTENSION in
       "gz")   # Check PV
-           if [ $( checkPV ) == "true" ]; then
+           if [ "$( checkPV )" == "true" ]; then
               # Flash with progress bar
               checkSD
             if [ "`diskutil unmountDisk $UNMOUNT_DEVICE 2>/dev/null`" ]; then
@@ -260,7 +260,7 @@ function flashSd()
           if [ -z $EXTENSION ]; then
              # Check PV
               checkSD
-              if [ $( checkPV ) == "true" ]; then
+              if [ "$( checkPV )" == "true" ]; then
                 # Flash with progress bar
               if [ "`diskutil unmountDisk $UNMOUNT_DEVICE 2>/dev/null`" ]; then
                 echo "Unmounted correctly"
