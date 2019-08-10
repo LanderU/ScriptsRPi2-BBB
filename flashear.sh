@@ -13,13 +13,15 @@ clear
 IMAGE_PATH="/Users/lander/ImagesFlash" #Change for your path
 DEVICE="/dev/disk2" #Change for your device
 FLASH_DEVICE="/dev/rdisk2" #Change for your device
+IMAGES_FLASH=$(ls "$IMAGE_PATH")
 
 cont=1
 indexArray=0
 imageArray=( )
 
-for i in `ls $IMAGE_PATH`; do
-	echo $cont"- "$i
+
+for i in $IMAGES_FLASH; do
+	echo "$cont- $i"
 	imageArray[$indexArray]=$i
 	indexArray=$(($indexArray+1))
 	cont=$(($cont+1))
