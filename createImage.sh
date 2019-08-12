@@ -71,7 +71,7 @@ function createImage()
 
 function checkSD()
 {
-  READ_ONLY=$(diskutil info $DEVICE | grep "Read-Only Media"| awk '{print $3}')
+  READ_ONLY=$(diskutil info "$DEVICE" | grep "Read-Only Media"| awk '{print $3}')
   if [ "$READ_ONLY" == "Yes" ]; then
     clear
     echo "Unable to flash your SD card, the SD is protected..."
