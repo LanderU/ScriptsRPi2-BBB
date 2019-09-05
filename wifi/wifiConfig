@@ -93,7 +93,7 @@ function internetConnection()
 
 function main()
 {
-  CURRENT_USER=`whoami`
+  CURRENT_USER=$(whoami)
 
   if [ "${CURRENT_USER}" = "root" ]; then
   firstMenu
