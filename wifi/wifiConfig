@@ -87,7 +87,7 @@ function internetConnection()
   } | whiptail --gauge "Configuring your network, please wait..." 6 50 0
 
   #Create file
-  $SET_NETWORK $NETWORK_NAME $PASSWORD > $WPA_DIR/net.conf
+  "$SET_NETWORK $NETWORK_NAME $PASSWORD" > "$WPA_DIR/net.conf"
 
 }
 
