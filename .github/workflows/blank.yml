@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Install shellcheck
-      run: apt update && apt install shellcheck -y
+      run: sudo apt update && sudo apt install shellcheck -y
     - name: Run a multi-line script
       run: |
           echo test1;
