@@ -11,8 +11,5 @@ jobs:
     - uses: actions/checkout@v1
     - name: Install shellcheck
       run: sudo apt update && sudo apt install shellcheck -y
-    - name: Run a multi-line script
-      run: |
-          echo test1;
-          echo test2;
-          pwd;
+    - name: Linter checks
+      run: bash ci-script.sh
