@@ -15,6 +15,9 @@ done
 if [ ${#files_invalid[@]} -ne 0 ]; then
 
 	echo "Errores"
+        for i in ${files_invalid[@]}; do
+		echo "$i"
+        done
 else
 	echo "No errores"
 fi
