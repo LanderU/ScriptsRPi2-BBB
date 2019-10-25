@@ -2,6 +2,8 @@
 
 ## With flashLinux script you can flash your SD.
 
+![](https://github.com/LanderU/ScriptsRPi2-BBB/.github/workflows/blank.yml/badge.svg)
+
 Dependencies
 =======
 
