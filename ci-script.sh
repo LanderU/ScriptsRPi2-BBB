@@ -18,6 +18,7 @@ if [ ${#files_invalid[@]} -ne 0 ]; then
         for i in "${files_invalid[@]}"; do
 		echo "$i"
         done
+	exit 1
 else
 	echo "No errores"
 fi
